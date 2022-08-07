@@ -1,0 +1,26 @@
+{
+  "name": "cataliws/dashui.cwapp",
+  "description": "Dashboard UI",
+  "keywords": ["catali", "web", "store","theme","ui", "user", "interface"],
+  "homepage": "https://github.com/cataliws/dashui.cwapp",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ikechukwu Okalia",
+      "email": "dev@ikechukwuokalia.com"
+    },
+    {
+      "name": "Tym Frontiers Ltd.",
+      "email": "dev@tymfrontiers.com"
+    }
+  ],
+  "require-dev": {},
+  "require": {
+    "soswapp/theme.soswapp" : ">=0.1@stable",
+    "cataliws/helper.cwapp" : ">=0.1@stable"
+  },
+  "autoload": {
+    "psr-4": {}
+  }
+}
