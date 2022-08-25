@@ -1,4 +1,541 @@
 @use "sass:map";
+@use "sass:list";
 @use "sass:math";
-@import "fn";
-@import "var";
+@import "../../../../var";
+@import "./var";
+@import "./fn";
+@import "./colors";
+
+html{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+body {
+  font-family: $body-font, $default-font;
+  font-size: 0.95em;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  color: $text-color;
+  background-color: $background-color;
+  padding: 0; margin: 0;
+  &.no-scroll{
+    overflow: hidden !important;
+  }
+}
+// Main view UI
+header#cwos-header {
+  position: fixed;
+  height: $header-height;
+  width: 100%;
+  background-color: #fff;
+  @include drop-shadow(#000);
+  padding: 9px 21px;
+  padding-left: 81px;
+  z-index: 140;
+  #aside-toggle{
+    position: absolute;
+    left: 15px; top: 10px;
+    width: 50px; height: 50px;
+    @include -br(4px);
+    #cwos-navbar-toggle,
+    #cwos-sidebar-toggle {
+      height: 50px;
+      width: 50px;
+      position: absolute;
+      left: 0; top: 0;
+      @include -br(4px);
+      border-style: solid;
+      border-width: 1px;
+      border-color: transparent;
+      @include no-shadow;
+      margin: 0;
+      padding: 15px;
+      z-index: 0;
+      &:hover{
+        border-color: darken(theme-color('cloud',bg), 8%);
+        background-color: theme-color('cloud-blue', bg);
+        color: theme-color('native', bg);
+      }
+      &::before{
+        font-family: $fa-pro, $fa-free;
+        font-weight: $fa-weight-solid;
+        font-size: 1.2em;
+      }
+      &.active{
+        color: theme-color('native', bg);
+      }
+    }
+    #cwos-navbar-toggle::before{ content: "\f0c9"; }
+    #cwos-navbar-toggle.active::before{ content: "\f00d"; }
+    #cwos-sidebar-toggle::before{ content: "\f204"; }
+    #cwos-sidebar-toggle.active::before{ content: "\f205"; }
+  }
+  #cwos-prjtitle{
+    position: relative;
+    width: 240px;
+    height: calc($header-height - 20px);
+    padding: 5px 6px;
+    text-align: center;
+    overflow: hidden;
+    #cwos-prjicon{
+      height: 100%;
+      img {
+        height: 100%;
+        width: auto;
+      }
+    }
+    a:hover{
+      opacity: 0.7;
+    }
+  }
+  &.centre #cwos-prjtitle{
+    margin: 0 auto;
+  }
+  &.strict-centre #cwos-prjtitle{
+    margin: 0 auto !important;
+  }
+  #cwos-user,
+  #cwos-notification,
+  #cwos-cart{
+    position: absolute;
+    top: 0;
+    width: $header-height;
+    height: $header-height;
+    border-bottom-width: 10px;
+    border-bottom-style: solid;
+    border-bottom-color: transparent !important;
+    @include animate-all;
+    &:hover{
+      cursor: pointer;
+    }
+    h1, h2, h3, h4, h5, h6, p{
+      margin: 3.5px 0;
+    }
+    .cwos-dropbar{
+      width: 280px;
+      position: absolute;
+      top: calc($header-height - 1px);
+      right: 0;
+      cursor: auto;
+      opacity: 0;
+      height: 0;
+      background-color: #fff;
+      color: $text-color;
+      overflow: hidden;
+      .cwos-dropbar-description{
+        display: block;
+        padding: 21px 16px;
+        margin: 0;
+        font-weight: lighter;
+      }
+      .cwos-dropbar-list{
+        position: relative;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        li{
+          position: relative;
+          padding: 16px 18px;
+          font-size: 0.95em;
+          @include animate-all;
+          &::before, &::after{
+            position: absolute;
+            display: block;
+            content: "";
+            height: 1px;
+            background-color: darken(theme-color('cloud', bg), 8%);
+            bottom: 0;
+            @include animate-width;
+          }
+          &::before{ left: 5%; width: 35%;}
+          &::after{ right: 0; z-index: 2; width: 0px;}
+          &:hover{
+            cursor: pointer;
+            background-color: lighten(theme-color('cloud', bg), 2%);
+            &::after{ width: 100%;}
+          }
+          a{
+            display: block;
+            color: inherit;
+            outline:none;
+            border:none;
+            text-decoration:none;
+          }
+        }
+      }
+    }
+    &.active .cwos-dropbar{ @include drop-shadow(#000); overflow: visible; }
+  }
+  #cwos-notification,
+  #cwos-cart{
+    font-size: 1.35em;
+    padding: 22px;
+    padding-bottom: 12px;
+    text-align: center;
+    &::before{
+      font-family: $fa-pro, $fa-free;
+      font-weight: $fa-weight-regular;
+    }
+    &.full{
+      border-bottom-color: rgba(theme-color('red', bg), 0.7) !important;
+    }
+    .cwos-dropbar{
+      font-size: 0.75em;
+      text-align: left;
+    }
+    .cwos-dropbar-list li{ min-height: 70px; padding-right: 45px;}
+    
+    .cwos-dropbar-list li .cwos-button,
+    .cwos-dropbar-list li .cwos-btn,
+    .cwos-dropbar-list li .theme-button,
+    .cwos-dropbar-list li .theme-btn{
+      position: absolute;
+      margin: 0;
+      right: 3px;
+      top: 0;
+      height: 25px;
+      width: 30px;
+      @include no-shadow;
+      @include -br(0);
+      padding: 8px 12px;
+      margin: 0 3px 12px 12px;
+    }
+    .cwos-dropbar-list li.unread{
+      font-weight: bold;
+    }
+    .cwos-dropbar-list li.critical { border-left-color: theme-color('red', bg) !important;}
+    .cwos-dropbar-list li.urgent { border-left-color: theme-color('amber', bg) !important;}
+    .cwos-dropbar-list li.important { border-left-color: theme-color('blue', bg) !important;}
+    .cwos-dropbar-list li.normal, .cwos-dropbar-list li.low,  .cwos-dropbar-list li.defer{
+      border-left-color: theme-color('grey', bg) !important;
+    }
+  }
+  #cwos-notification::before{ content: "\f0f3";}
+  #cwos-notification.full::before{ content: "\f8fa"; font-weight: $fa-weight-solid;}
+  #cwos-cart::before{ content: "\f07a";}
+  #cwos-cart.full::before{ content: "\f217"; font-weight: $fa-weight-solid;}
+  #cwos-user{
+    right: 0;
+    background-color: rgba(theme-color('native', bg), 0.2);
+    #cwos-user-title,
+    #cwos-user-avatar{
+      height: 100%;
+      float: left;
+    }
+    #cwos-user-title{
+      display: none;
+      width: calc($header-height * 2);
+      font-family: $header-font;
+      font-size: 1.2em;
+      padding: 25px 10px 5px 10px;
+      text-align: center;
+      overflow: hidden;
+    }
+    #cwos-user-avatar{
+      width: $header-height;
+      padding: 15px 15px 5px 15px;
+      img{
+        width: 100%;
+        height: 100%;
+        @include -br(100%);
+      }
+    }
+    &:hover{
+      background-color: rgba(theme-color('native', bg), 0.8);
+      color: theme-color('native', fg);
+    }
+    &.active{ border-bottom-color: theme-color('native', bg) !important; overflow: visible; }
+    &.active > .cwos-dropbar{ overflow: visible !important; }
+    .cwos-dropbar-list li:hover{
+      color: darken(theme-color('native', bg), 14%);
+      &::after{ background-color: theme-color('native', bg) !important;}
+    }
+  }
+  #cwos-notification{
+    right: $header-height;
+    background-color: rgba(theme-color('yellow', bg), 0.2);
+    &:hover{
+      background-color: rgba(theme-color('yellow', bg), 0.8);
+      color: theme-color('yellow', fg);
+    }
+    &.active{ border-bottom-color: theme-color('yellow', bg) !important; }
+    .cwos-dropbar{ right: - math.div(calc(280px - $header-height), 2); font-size: 0.7em;}
+    .cwos-dropbar-list li:hover{
+      color: theme-color('yellow', bg);
+      background-color: lighten(#000, 20%) !important;
+      &::after{ background-color: theme-color('yellow', bg) !important;}
+    }
+    .cwos-dropbar-list li{
+      border-left: solid 5px theme-color('grey', bg);
+      &.priority-urgent{ border-left-color: theme-color('purple', bg) !important;}
+      &.priority-high{ border-left-color: theme-color('red', bg) !important;}
+    }
+  }
+  #cwos-cart{
+    right: calc($header-height * 2);
+    background-color: rgba(theme-color('amber', bg), 0.2);
+    &:hover{
+      background-color: rgba(theme-color('amber', bg), 0.8);
+      color: theme-color('amber', fg);
+    }
+    &.active{ border-bottom-color: theme-color('amber', bg) !important; }
+    .cwos-dropbar{ left: 0px !important; right: auto;}
+    .cwos-dropbar-list li:hover{
+      color: darken(theme-color('amber', bg), 14%);
+      &::after{ background-color: theme-color('amber', bg) !important;}
+    }
+  }
+  #cwos-mobxtra-icon{
+    position: relative;
+    height: $header-height;
+    margin-bottom: 21px;
+    // background-color: pink;
+    z-index: 20;
+    button{ border: none !important;}
+    #cwos-notification-xtra,
+    #cwos-cart-xtra{
+      position: absolute;
+      top: 0;
+      width: $header-height;
+      height: $header-height;
+      border-bottom-width: 10px;
+      border-bottom-style: solid;
+      border-bottom-color: transparent !important;
+      @include animate-all;
+      font-size: 1.35em;
+      padding: 22px;
+      padding-bottom: 12px;
+      text-align: center;
+      &::before{
+        font-family: $fa-pro, $fa-free;
+        font-weight: $fa-weight-regular;
+      }
+      &.full{
+        border-bottom-color: rgba(theme-color('red', bg), 0.7) !important;
+      }
+      .cwos-dropbar{
+        font-size: 0.75em;
+        text-align: left;
+      }
+      &:hover{  cursor: pointer; }
+      h1, h2, h3, h4, h5, h6, p{
+        margin: 3.5px 0;
+      }
+      .cwos-dropbar{
+        width: 280px;
+        position: absolute;
+        top: $header-height;
+        right: 0;
+        cursor: auto;
+        opacity: 0;
+        height: 0;
+        background-color: #fff;
+        color: $text-color;
+        overflow: hidden;
+        .cwos-dropbar-description{
+          display: block;
+          padding: 21px 16px;
+          margin: 0;
+          font-weight: lighter;
+        }
+        .cwos-dropbar-list{
+          position: relative;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          li{
+            position: relative;
+            padding: 16px 18px;
+            font-size: 0.95em;
+            @include animate-all;
+            &::before, &::after{
+              position: absolute;
+              display: block;
+              content: "";
+              height: 1px;
+              background-color: darken(theme-color('cloud', bg), 8%);
+              bottom: 0;
+              @include animate-width;
+            }
+            &::before{ left: 5%; width: 35%;}
+            &::after{ right: 0; z-index: 2; width: 0px;}
+            &:hover{
+              cursor: pointer;
+              background-color: lighten(theme-color('cloud', bg), 2%);
+              &::after{ width: 100%;}
+            }
+            a{
+              display: block;
+              color: inherit;
+              outline:none;
+              border:none;
+              text-decoration:none;
+            }
+          }
+        }
+      }
+      .cwos-dropbar-list li .cwos-button,
+      .cwos-dropbar-list li .cwos-btn,
+      .cwos-dropbar-list li .theme-button,
+      .cwos-dropbar-list li .theme-btn{
+        position: absolute;
+        margin: 0;
+        right: 0;
+        top: 0;
+        height: 35px;
+        width: 40px;
+        @include no-shadow;
+        @include -br(0);
+        padding: 8px 12px;
+        margin: 0 0 12px 12px;
+      }
+      &.active .cwos-dropbar{ @include drop-shadow(#000); }
+    }
+    #cwos-notification-xtra{ right: 0;}
+    #cwos-cart-xtra{ right: $header-height;}
+    #cwos-notification-xtra::before{ content: "\f0f3";}
+    #cwos-notification-xtra.full::before{ content: "\f8fa"; font-weight: $fa-weight-solid;}
+    #cwos-cart-xtra::before{ content: "\f07a";}
+    #cwos-cart-xtra.full::before{ content: "\f217"; font-weight: $fa-weight-solid;}
+    
+    #cwos-notification-xtra{
+      background-color: rgba(theme-color('yellow', bg), 0.2);
+      &:hover{
+        background-color: rgba(theme-color('yellow', bg), 0.8);
+        color: theme-color('yellow', fg);
+      }
+      &.active{ border-bottom-color: theme-color('yellow', bg) !important; }
+      .cwos-dropbar{ right: 0; font-size: 0.7em;}
+      .cwos-dropbar-list li:hover{
+        color: theme-color('yellow', bg);
+        background-color: lighten(#000, 20%) !important;
+        &::after{ background-color: theme-color('yellow', bg) !important;}
+      }
+      .cwos-dropbar-list li{
+        border-left: solid 5px theme-color('grey', bg);
+        &.priority-urgent{ border-left-color: theme-color('purple', bg) !important;}
+        &.priority-high{ border-left-color: theme-color('red', bg) !important;}
+      }
+    }
+    #cwos-cart-xtra{
+      background-color: rgba(theme-color('amber', bg), 0.2);
+      &:hover{
+        background-color: rgba(theme-color('amber', bg), 0.8);
+        color: theme-color('amber', fg);
+      }
+      &.active{ border-bottom-color: theme-color('amber', bg) !important; }
+      .cwos-dropbar{ right: 0;}
+      .cwos-dropbar-list li:hover{
+        color: darken(theme-color('amber', bg), 14%);
+        &::after{ background-color: theme-color('amber', bg) !important;}
+      }
+    }
+
+  }
+  .cwos-dropbar ul .cwos-btn,
+  .cwos-dropbar ul .cwos-button,
+  .cwos-dropbar ul .theme-btn,
+  .cwos-dropbar ul .theme-button{
+    height: 21px !important;
+    top: 15px !important;
+  }
+  .cwos-dropbar ul{
+    &.error,
+    &.loading,
+    &.empty {
+      min-height: 60px;
+    }
+    &.loading::before,
+    &.error::before,
+    &.empty::before{
+      font-family: $fa-pro, $fa-free;
+      font-weight: $fa-weight-regular;
+      font-size: 1.2em;
+      display: inline-block;
+      margin: 12px 8px;
+    }
+    &.loading::after,
+    &.error::after,
+    &.empty::after{
+      font-family: inherit;
+      display: inline-block;
+      font-size: 0.9em;
+    }
+    &.loading::before{
+      content: "\f3f4";
+      @include spin;
+      cursor: progress;
+    }
+    &.loading::after{
+      content: "Loading ... please wait";
+      cursor: progress;
+    }
+    &.error::before{
+      content: "\f06a";
+      font-weight: $fa-weight-solid;
+    }
+    &.error::after{
+      content: "Failed to fetch data, contact Dev.";
+    }
+    &.empty::before{
+      content: "\f49e";
+      font-weight: $fa-weight-regular;
+    }
+    &.empty::after{
+      content: "Nothing yet.";
+    }
+  }
+  :disabled{
+    cursor: not-allowed;
+  }
+}
+aside#cwos-sidebar,
+section#cwos-content{
+  position: fixed;
+  top: $header-height;
+  // @include animate-all;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+aside#cwos-sidebar{
+  background-color: darken($background-color, 7%);
+  width: 260px;
+  left: -260px;
+  opacity: 0;
+  z-index: 100;
+  &.active{ left: 0;}
+}
+section#cwos-content{
+  right: 0;
+  z-index: 50;
+}
+#cwos-view-fader{
+  position: fixed;
+  right: 0;
+  background-color: rgba(theme-color('transparent', light), 0.6);
+  z-index: 99;
+}
+body.no-scroll,
+body.no-scroll section#cwos-content{
+  overflow: hidden !important;
+}
+// tablet view
+@media only screen and (min-width: 48em) {
+  #cwos-mobxtra-icon{ height: 0px !important;}
+  #cwos-user #cwos-user-title{ display: block !important; }
+  #cwos-user{ width: calc($header-height * 3) !important; }
+  #cwos-notification{ right: calc($header-height * 3) !important; }
+  #cwos-cart{ right: calc($header-height * 4) !important; }
+
+}
+// laptop view
+@media only screen and (min-width: 62em) {
+}
+// desktop view
+@media only screen and (min-width: 81em) {
+}

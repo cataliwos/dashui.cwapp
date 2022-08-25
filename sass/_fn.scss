@@ -105,3 +105,20 @@
   -moz-border#{$rp}-radius: $width;
   border#{$rp}-radius: $width;
 }
+@function in-list($value, $list) {
+	@return (null != list.index($list, $value));
+}
+@-webkit-keyframes
+ripple { to {
+   -webkit-transform: scale(1.5);
+   transform: scale(1.5);
+   opacity: 0;
+  }
+}
+@keyframes
+ripple { to {
+   -webkit-transform: scale(1.5);
+   transform: scale(1.5);
+   opacity: 0;
+  }
+}

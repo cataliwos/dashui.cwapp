@@ -1,8 +1,8 @@
 {
-  "name": "cataliws/dashui.cwapp",
-  "description": "Dashboard UI",
+  "name": "cataliwos/dashui.cwapp",
+  "description": "Dashboard UI theme",
   "keywords": ["catali", "web", "store","theme","ui", "user", "interface"],
-  "homepage": "https://github.com/cataliws/dashui.cwapp",
+  "homepage": "https://github.com/cataliwos/dashui.cwapp",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -17,8 +17,8 @@
   ],
   "require-dev": {},
   "require": {
-    "soswapp/theme.soswapp" : ">=0.1@stable",
-    "cataliws/helper.cwapp" : ">=0.1@stable"
+    "cataliws/helper.cwapp" : ">=0.1@stable",
+    "cataliwos/plugin.cwapp" : ">=0.1@stable"
   },
   "autoload": {
     "psr-4": {}
