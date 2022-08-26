@@ -17,7 +17,7 @@ class DashUI {
       headerHeight: 70,
       animMin: 160,
       animMax: 260,
-      maxCartItem: 4,
+      maxCartItem: 3,
       maxNoticeItem: 4,
       stateProgress: 4
     }
@@ -73,6 +73,8 @@ class DashUI {
       path: null, // /link/to/checkout
       get: null, // /link/to/load/cart-items
       currency: 'USD', // cart currency
+      subtotal: 0.00,
+      subtotalText: 0.00,
       page: 1,
       pages: 0,
       limit: 4,
@@ -153,6 +155,63 @@ class DashUI {
       }
     }
   }
+  prepCart (cart) {
+    if (typeof cart == "object") {
+      if ("delete" in cart && "path" in cart && "get" in cart) {
+        this.cart.get = cart.get;
+        this.cart.delete = cart.delete;
+        this.cart.path = cart.path;
+        let ths = this;
+        if ("pages" in cart) ths.cart.pages = cart.pages;
+        if ("page" in cart) ths.cart.page = cart.page;
+        if ("nextPage" in cart) ths.cart.nextPage = cart.nextPage;
+        if ("previousPage" in cart) ths.cart.previousPage = cart.previousPage;
+        if ("records" in cart) ths.cart.records = cart.records;
+        if ("subtotal" in cart) ths.cart.subtotal = cart.subtotal;
+        if ("currency" in cart) ths.cart.currency = cart.currency;
+        // fetch data
+        if ("list" in cart) {
+          // process list
+          ths.pushCartList(cart.list);
+        } else {
+          // fetch list
+          let getParam = param && typeof param == "object" ? param : {};
+          getParam.limit = this.conf.maxCartItem;
+          $.ajax({
+            url:  cart.get,
+            data: getParam,
+            dataType : "json",
+            type: "GET",
+            async: false,
+            success : function(resp) {
+              if( resp && (resp.status == '0.0' || resp.errors.length <= 0) && "data" in resp){
+                // process data
+                if ("pages" in resp) ths.cart.pages = resp.pages;
+                if ("page" in resp) ths.cart.page = resp.page;
+                if ("nextPage" in resp) ths.cart.nextPage = resp.nextPage;
+                if ("previousPage" in resp) ths.cart.previousPage = resp.previousPage;
+                if ("records" in resp) ths.cart.records = resp.records;
+                if ("subtotal" in resp) ths.cart.subtotal = resp.subtotal;
+                if ("subtotalText" in resp) ths.cart.subtotalText = resp.subtotalText;
+                if ("currency" in resp) ths.cart.currency = resp.currency;
+                if (objectLength(resp.data) > 0) {
+                  ths.pushCartList(resp.data);
+                }
+              } else {
+                ths.cart.error = true;
+                // console.error(`Invalid response gotten for cart data: ${resp.errors.join(" | ")}`);
+              }
+            },
+            error : function(xhr){
+              ths.cart.error = true;
+              // console.error(`Failed to load cart recource: (${xhr.status}) ${xhr.statusText}`);
+            }
+          });
+        }
+      }
+    }
+    this.state ++;
+  }
   prepNotification (notification) {
     if (typeof notification == "object") {
       if ("delete" in notification && "path" in notification && "get" in notification) {
@@ -176,10 +235,11 @@ class DashUI {
           getParam.limit = this.conf.maxNoticeItem;
           getParam.unread = true;
           $.ajax({
-            url :  notification.get,
+            url:  notification.get,
             data: getParam,
             dataType : "json",
-            type : "GET",
+            type: "GET",
+            async: false,
             success : function(resp) {
               if( resp && (resp.status == '0.0' || resp.errors.length <= 0) && "data" in resp){
                 // process data
@@ -194,12 +254,12 @@ class DashUI {
                 }
               } else {
                 ths.notification.error = true;
-                console.error(`Invalid response gotten for notification data: ${resp.errors.join(" | ")}`);
+                // console.error(`Invalid response gotten for notification data: ${resp.errors.join(" | ")}`);
               }
             },
             error : function(xhr){
               ths.notification.error = true;
-              console.error(`Failed to load notification recource: (${xhr.status}) ${xhr.statusText}`);
+              // console.error(`Failed to load notification recource: (${xhr.status}) ${xhr.statusText}`);
             }
           });
         }
@@ -244,53 +304,11 @@ class DashUI {
         }
       });
     }
+    if (objectLength(list)) this.cart.full = true;
     this.cart.list = list;
     this.ready.push("cart");
   }
-  prepCart (cart) {
-    if (typeof cart == "object") {
-      if ("delete" in cart && "path" in cart && "get" in cart) {
-        this.cart.delete = cart.delete;
-        this.cart.path = cart.path;
-        this.cart.get = cart.get;
-        let ths = this;
-        // fetch data
-        if ("list" in cart) {
-          // process list
-          ths.pushCartList(cart.list);
-        } else {
-          // fetch list
-          $.ajax({
-            url :  cart.get,
-            data: typeof param == "object" ? param : {},
-            dataType : "json",
-            type : "GET",
-            success : function(resp) {
-              if( resp && (resp.status == '0.0' || resp.errors.length <= 0) && "data" in resp){
-                // process data
-                if ("pages" in resp) ths.cart.pages = resp.pages;
-                if ("page" in resp) ths.cart.page = resp.page;
-                if ("nextPage" in resp) ths.cart.nextPage = resp.nextPage;
-                if ("previousPage" in resp) ths.cart.previousPage = resp.previousPage;
-                if ("records" in resp) ths.cart.records = resp.records;
-                if (objectLength(resp.data) > 0) {
-                  ths.pushCartList(resp.data);
-                }
-              } else {
-                ths.cart.error = true;
-                // console.error(`Invalid response gotten for cart data: ${resp.errors.join(" | ")}`);
-              }
-            },
-            error : function(xhr){
-              ths.cart.error = true;
-              // console.error(`Failed to load cart recource: (${xhr.status}) ${xhr.statusText}`);
-            }
-          });
-        }
-      }
-    }
-    this.state ++;
-  }
+ 
   prepSidebar (sidebar) {
     if (typeof sidebar !== "object") {
       this.getSrc(sidebar, "prepSidebar", {data_type: "json"});
@@ -367,6 +385,38 @@ class DashUI {
     }
     return dom;
   }
+  rmCart (id) {
+    let elem = $(document).find(`#cwos-cart-li${id}`);
+    let ths = this;
+    if (id && elem.length && confirm("You are about to delete this cart item.")) {
+      let wrapper = elem.parent("ul");
+      alert("<p>Please wait</p>", {type:'progress'});
+      $.ajax({
+        url :  ths.cart.delete,
+        data: {id : id},
+        dataType : "json",
+        type : "GET",
+        success : function(resp) {
+          if( resp && (resp.status == '0.0' || resp.errors.length <= 0)){
+            // process data
+            delete ths.cart.list[id];
+            elem.fadeOut("slow").remove();
+            ths.cart.records --;
+            $(document).find(".cwos-cart-item-total").text(ths.cart.records);
+            alert(`<h3>Deleted!</h3><p>${resp.message}</p>`,{type:'success'});
+            setTimeout(function(){
+              removeAlert();
+            }, 1200);
+          } else {
+            alert(`<h3>Delete error</h3> <p>Invalid response gotten for cart data: ${resp.errors.join(" | ")}</p>`, {type:"error"});
+          }
+        },
+        error : function(xhr){
+          alert(`<h3>Delete error</h3> <p>Failed to load cart recource: (${xhr.status}) ${xhr.statusText}</p>`, {type:"error"});
+        }
+      });
+    }
+  }
   rmNotification (id) {
     let elem = $(document).find(`#cwos-notification-li${id}`);
     let ths = this;
@@ -381,7 +431,7 @@ class DashUI {
         success : function(resp) {
           if( resp && (resp.status == '0.0' || resp.errors.length <= 0)){
             // process data
-            delete ths.notification[id];
+            delete ths.notification.list[id];
             elem.fadeOut("slow").remove();
             ths.notification.records --;
             $(document).find(".cwos-all-notifications").text(ths.notification.records);
@@ -419,7 +469,9 @@ class DashUI {
       $("body").prepend(this.domHeader());
       this.layout();
       this.startServices();
+      removeAlert();
     } if (window.intervCnt >= 10 * 10) {
+      removeAlert();
       clearInterval(window.checkState);
       delete window.checkState;
       delete window.intervCnt;
@@ -430,6 +482,7 @@ class DashUI {
       const req = new Promise((resolve, reject) => {
         $.ajax({
           url :  path,
+          async: false,
           dataType : options.data_type !== undefined ? options.data_type : "json",
           type : (options.type !== undefined && options.type in ["GET","POST"]) ? options.type : "GET",
           success : function(resp) {
@@ -519,7 +572,6 @@ class DashUI {
       e.stopPropagation();
     });
     $(document).find(".cwos-dropbar ul li button").on("click", "", function(e){
-      console.log("clicked");
       e.stopPropagation();
     });
   }
@@ -598,17 +650,42 @@ class DashUI {
   domCart () {
     let dom = ``;
     if (this.ready.includes("cart")) {
-      dom += `<div id="${this.conf.cart}" onclick="" class="theme-color amber hide-phone">`;
+      let ulcls = ["cwos-dropbar-list"];
+      let ths = this;
+      let cls = ["theme-color", "amber", "hide-phone"];
+      if (this.cart.full) cls.push("full");
+      dom += `<div id="${this.conf.cart}" class="${cls.join(' ')}">`;
         dom += `<div class="cwos-dropbar">`;
           dom += `<div class="cwos-dropbar-description color-bg">`;
-            dom += `<button disabled onclick="" class="cwos-cart-checkout cwos-button asphalt clear-border push-right margn -m10 -mleft -mbottom no-shadow paddn -p10 -pall"><i class="fas fa-money-bill"></i> Checkout</button>`;
+            if (this.cart.full) {
+              dom += `<button onclick="redirectTo('${this.cart.path}')" class="cwos-cart-checkout cwos-button asphalt clear-border push-right margn -m10 -mleft -mbottom no-shadow paddn -p10 -pall"><i class="fas fa-money-bill"></i> Checkout</button>`;
+              dom += `<br>`;
+            }
             dom += `<h3>My Cart</h3>`; 
-            dom += `<p>(<span class='cwos-cart-item-total'>0</span>) Items</p>`;
-            dom += `<h4>Subtotal</h4>`; 
-            dom += `<code class="cwos-cart-subtotal font-size-1-2" title="">0.00</code>`;
+            dom += `<p>(<span class='cwos-cart-item-total'>${this.cart.records}</span>) Items</p>`;
+            dom += `<h4>Subtotal (${this.cart.currency})</h4>`; 
+            dom += `<code class="cwos-cart-subtotal font-size-1-2 currency-${this.cart.currency.toLocaleLowerCase()}" title="${this.cart.currency}">${this.cart.subtotalText}</code>`;
           dom += `</div>`;
-          dom += `<ul class="cwos-dropbar-list">`;
-          dom+= `</ul>`;
+          dom += `<ul`;
+          if (this.cart.error) {
+            ulcls.push("error");
+          } else {
+            if (objectLength(this.cart.list) <= 0) ulcls.push("empty");
+          }
+          dom += ` class="${ulcls.join(' ')}">`;
+          if (objectLength(this.cart.list) > 0) {
+            $.each(this.cart.list, function(_i, crt){
+              dom += `<li id="cwos-cart-li${crt.id}"`;
+              $.each(crt, function(key, val){ dom += ` data-${key}="${val}"`; });
+              dom += '>';
+                dom += `<code class="color-blue currency-${ths.cart.currency.toLocaleLowerCase()}">${'priceText' in crt ? crt.priceText : crt.price}</code>`;
+                dom += `<br>`;
+                dom += `(${crt.quantity}x) ${crt.description}`;
+                dom += `<button onclick="cwos.ui.rmCart(${crt.id})" class="cwos-button red"></button>`;
+              dom += '</li>';
+            });
+          }
+          dom += `</ul>`;
         dom += `</div>`;
       dom += `</div>`;
     }
