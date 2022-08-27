@@ -86,6 +86,14 @@ class DashUI {
     }
     this.spotlight = {}
     this.sidenav = []
+    this.footer = {
+      title: "",
+      path: "",
+      copyright: "",
+      license: "",
+      terms: {},
+      policy: {}
+    }
     this.state = 0;
 
     // initialize
@@ -354,6 +362,38 @@ class DashUI {
         });
         this.sidenav = sidenav;
         this.ready.push("sidenav");
+      } if ("footer" in sidebar && typeof sidebar.footer == "object") {
+        if (
+          "title" in sidebar.footer
+          && "path" in sidebar.footer
+          && "copyright" in sidebar.footer
+          && "license" in sidebar.footer
+        ) {
+          this.footer.title = sidebar.footer.title;
+          this.footer.path = sidebar.footer.path;
+          this.footer.copyright = sidebar.footer.copyright;
+          this.footer.license = sidebar.footer.license;
+          this.ready.push("footer");
+          if ("terms" in sidebar.footer && typeof sidebar.footer.terms == "object") {
+            if (
+              "title" in sidebar.footer.terms
+              && "icon" in sidebar.footer.terms
+              && "path" in sidebar.footer.terms
+              && "newtab" in sidebar.footer.terms
+            ) {
+              this.footer.terms = sidebar.footer.terms;
+            }
+          } if ("policy" in sidebar.footer && typeof sidebar.footer.policy == "object") {
+            if (
+              "title" in sidebar.footer.policy
+              && "icon" in sidebar.footer.policy
+              && "path" in sidebar.footer.policy
+              && "newtab" in sidebar.footer.policy
+            ) {
+              this.footer.policy = sidebar.footer.policy;
+            }
+          }
+        }
       }
       this.state ++;
     }
@@ -469,9 +509,10 @@ class DashUI {
       $("body").prepend(this.domHeader());
       this.layout();
       this.startServices();
-      removeAlert();
+      setTimeout(this.removeLoader.bind(this), 100*5);
+      // this.removeLoader();
     } if (window.intervCnt >= 10 * 10) {
-      removeAlert();
+      this.removeLoader();
       clearInterval(window.checkState);
       delete window.checkState;
       delete window.intervCnt;
@@ -574,6 +615,100 @@ class DashUI {
     $(document).find(".cwos-dropbar ul li button").on("click", "", function(e){
       e.stopPropagation();
     });
+    $(document).on("click", ".cwos-snavheadn", function(){
+      if ($(this).hasClass("xpndnv")) {
+        ths.closeNav(this);
+      } else {
+        ths.xpandNav(this);
+      }
+    });
+    // find open nav
+    let opnNv = Cookies.get("cwosopnsnav");
+    if (opnNv && $(`#${opnNv}`).length) {
+      ths.xpandNav($(`#${opnNv}`).find(".cwos-snavheadn"));
+    } else {
+      let fstNv = $(document).find(".cwos-snavwrp")[0];
+      if (fstNv) {
+        ths.xpandNav($(fstNv).find(".cwos-snavheadn"));
+      }
+    }
+    $(document).on("click", "#cwos-sptltoggl", function(){
+      if ($(this).hasClass("btn-opn")) {
+        // close
+        let elem = $(this).parent("#cwos-sltitle").find("#cwos-sllinks");
+        let ths = $(this);
+        if (elem) {
+          elem.animate({
+            height: 0,
+            opacity: 0
+          },160, function(){
+            ths.removeClass("btn-opn");
+          });
+        }
+      } else {
+        let elem = $(this).parent("#cwos-sltitle").find("#cwos-sllinks");
+        let ths = $(this);
+        if (elem) {
+          let ht = 0;
+          elem.find("li").each(function(){
+            ht += $(this).outerHeight();
+          });
+          if (ht > 0) {
+            elem.animate({
+              height: ht,
+              opacity: 1
+            }, 160, function(){
+              ths.addClass("btn-opn");
+            });
+          }
+        }
+      }
+    });
+  }
+  xpandNav (elem) {
+    elem = $(elem);
+    let ht=22, lst = null, wrapper = null;
+    if (elem && elem.length && elem.data().wrapper.length) {
+      wrapper = $(document).find(`#${elem.data().wrapper}`);
+      if (wrapper && wrapper.length) {
+        lst = wrapper.find("ul.cwos-sidenav");
+        if ((lst && lst.length) && !wrapper.hasClass("xpndnv")) {
+          Cookies.set('cwosopnsnav', elem.data().wrapper, {expires : 1, secure: true, sameSite: 'strict'});
+          ht += elem.outerHeight();
+          ht += lst.outerHeight();
+          wrapper.animate({
+            height: ht
+          }, 280, function(){
+            wrapper.addClass("xpndnv");
+            elem.addClass("xpndnv");
+          });
+        }
+      }
+    }
+  }
+  closeNav (elem) {
+    elem = $(elem);
+    let ht=45, wrapper = null;
+    if (elem && elem.length && elem.data().wrapper.length && elem.hasClass("xpndnv")) {
+      wrapper = $(document).find(`#${elem.data().wrapper}`);
+      if (wrapper && wrapper.length) {
+        wrapper.animate({
+          height: ht
+        }, 280, function(){
+          wrapper.removeClass("xpndnv");
+          elem.removeClass("xpndnv");
+        });
+      }
+    }
+  }
+  removeLoader () {
+    let loadr = $("#cwos-uiloadr");
+    if (loadr) {
+      loadr.fadeOut("slow", function(){
+        loadr.remove();
+        removeAlert();
+      });
+    }
   }
   domHeader () {
     let html = `<header id="${this.conf.header}">`;
@@ -736,21 +871,104 @@ class DashUI {
   }
   domSpotlight () {
     let dom = ``;
+    if (this.ready.includes("spotlight")) {
+      dom += `<div id="cwos-asidespotlight">`;
+        dom += `<div id="cwos-slcover">`;
+          dom += `<img src="${this.spotlight.cover}" alt="${this.spotlight.title}">`;
+        dom += `</div>`;
+        dom += `<div id="cwos-slavatar">`;
+          dom += `<img src="${this.spotlight.avatar}" alt="${this.spotlight.title}">`;
+        dom += `</div>`;
+        dom += `<div id="cwos-sltitle" title="${this.spotlight.title}">`;
+          dom += `<button type="button" id="cwos-sptltoggl" class="cwos-button"></button>`;
+          dom += `<h3>${this.spotlight.title.length > 18 ? this.spotlight.title.substring(0,16) + '..' : this.spotlight.title}</h3>`;
+          dom += `<h4>${this.spotlight.subtitle.length > 17 ? this.spotlight.subtitle.substring(0,15) + '..' : this.spotlight.subtitle}</h4>`;
+          if ("links" in this.spotlight && typeof this.spotlight.links == "object" && objectLength(this.spotlight.links)) {
+            dom += `<ul id="cwos-sllinks">`;
+            $.each(this.spotlight.links, function(_i, lnk){
+              dom += `<li`;
+              if (lnk.onclick) {
+                dom += ` onclick="${lnk.onclick}();"`;
+              } else {
+                dom += ` onclick="redirectTo('${lnk.path}')"`;
+              }
+              dom += `>${lnk.title}</li>`;
+            });
+            dom += `</ul>`;
+          }
+        dom += `</div>`;
+      dom += `</div>`;
+    }
     return dom;
   }
   domSidenav () {
-    let dom = ``;
+    let focusGroup = {};
+    let dom = "";
+    $.each(this.sidenav, function(_i, nav){
+      if (nav.links && objectLength(nav.links)) {
+        dom += `<div class="cwos-snavwrp" id="cwos-nvwrp-${nav.name}">`;
+          dom += `<h2 data-wrapper="cwos-nvwrp-${nav.name}" class="cwos-snavheadn">${nav.title}</h2>`;
+          let ulcls = ["cwos-sidenav"];
+          dom += `<ul class="${ulcls.join(' ')}" id="cwos-snav-${nav.name}">`;
+            if ("links" in nav && typeof nav.links == "object") {
+              focusGroup[nav.name] = [];
+              $.each(nav.links, function(_ni, lnk){
+                focusGroup[nav.name].push(lnk.name);
+                dom += `<li id="cwos-snavli-${lnk.name}"`;
+                if(typeof cwos.config.page == 'object' && cwos.config.page.name == lnk.name) {
+                  dom += ` class="cwos-curnav"`;
+                } if (lnk.onclick.length) {
+                  dom += ` onclick="${lnk.onclick}();"`;
+                } else {
+                  dom += ` onclick="redirectTo('${lnk.path}', ${lnk.newtab});"`;
+                }
+                dom += `>`;
+                  dom += lnk.icon ? `${lnk.icon} ` : "";
+                  dom += lnk.title
+                dom += "</li>";
+              });
+            }
+        dom += `</ul>`;
+        dom += `</div>`;
+      }
+    });
+    return dom;
+  }
+  domFooter () {
+    let dom = "";
+    if (this.ready.includes("footer")) {
+      dom += `<footer id="cwos-sidefoot">`;
+        dom += `<p class="cwos-ftprop">`;
+          dom += `<a href="${this.footer.path}">${this.footer.title}</a>`;
+        dom += `</p>`;
+        dom += `<p>${this.footer.copyright} | ${this.footer.license}</p>`;
+        let ftTP = [];
+        if (objectLength(this.footer.terms)) {
+          let ft = `<a href="${this.footer.terms.path}"`;
+            if (this.footer.terms.newtab) ft += ` target="_blank"`;
+              ft += `>${this.footer.terms.icon} ${this.footer.terms.title}</a>`;
+          ftTP.push(ft);
+        } if (objectLength(this.footer.policy)) {
+          let fp = `<a href="${this.footer.policy.path}"`;
+            if (this.footer.policy.newtab) fp += ` target="_blank"`;
+              fp += `>${this.footer.policy.icon} ${this.footer.policy.title}</a>`;
+          ftTP.push(fp);
+        } if (objectLength(ftTP)) {
+          dom += `<p>${ftTP.join(" | ")}</p>`;
+        }
+      dom += `</footer>`;
+    }
     return dom;
   }
   domSidebar () {
     let dom = ``;
     if (this.ready.includes("sidebar")) {
       dom += `<aside id="${this.conf.sidebar}">`;
-        dom += this.domSpotlight();
-        dom += this.domSidenav();
-        dom += `<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Facere eaque dolor quae eveniet hic fugit necessitatibus, possimus quaerat ducimus illum deleniti, ipsa facilis harum ea quam architecto rem amet labore!</p>`;
-        dom += `<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Facere eaque dolor quae eveniet hic fugit necessitatibus, possimus quaerat ducimus illum deleniti, ipsa facilis harum ea quam architecto rem amet labore!</p>`;
-        dom += `<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Facere eaque dolor quae eveniet hic fugit necessitatibus, possimus quaerat ducimus illum deleniti, ipsa facilis harum ea quam architecto rem amet labore!</p>`;
+        dom += `<div id="cwos-asidewrp">`;
+          dom += this.domSpotlight();
+          dom += this.domSidenav();
+          dom += this.domFooter();
+        dom += "</div>";
       dom += `</aside>`;
     }
     return dom;
