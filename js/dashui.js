@@ -116,7 +116,7 @@ class DashUI {
   }
   showSidebar () {
     if (!this.ready.includes("sidebar")) return false;
-    let ck = Cookies.get('cwossidebar');
+    let ck = (new Cookie(true)).get('cwossidebar', location.hostname);
     return (ck == 'on' || ck == undefined) && !this.isMobVw();
   }
   setConf (options) {
@@ -623,7 +623,7 @@ class DashUI {
       }
     });
     // find open nav
-    let opnNv = Cookies.get("cwosopnsnav");
+    let opnNv = (new Cookie(true)).get("cwosopnsnav", location.hostname);
     if (opnNv && typeof opnNv == 'string' && $(`#${opnNv}`).length) {
       ths.xpandNav($(`#${opnNv}`).find(".cwos-snavheadn"));
     } else {
@@ -673,7 +673,7 @@ class DashUI {
       if (wrapper && wrapper.length) {
         lst = wrapper.find("ul.cwos-sidenav");
         if ((lst && lst.length) && !wrapper.hasClass("xpndnv")) {
-          Cookies.set('cwosopnsnav', elem.data().wrapper, {expires : 1, secure: true, sameSite: 'strict', domain: location.hostname});
+          (new Cookie(true)).set('cwosopnsnav', elem.data().wrapper, {expires : "1 day", secure: true, sameSite: 'strict', domain: location.hostname});
           ht += elem.outerHeight();
           ht += lst.outerHeight();
           wrapper.animate({
@@ -1056,7 +1056,7 @@ class DashUI {
     // set cookie
     // cwossidebar = off
     if (sidebar.hasClass("active") || sidebarBtn.hasClass("active")) {
-      Cookies.set('cwossidebar', 'off', {expires : 1, secure: true, sameSite: 'strict', domain: location.hostname});
+      (new Cookie(true)).set('cwossidebar', 'off', {expires : "1 day", secure: true, sameSite: 'strict', domain: location.hostname});
       sidebar.animate({
         opacity: 0,
         left: -this.conf.sidebarWidth
@@ -1079,7 +1079,7 @@ class DashUI {
     // cwossidebar = on
     sidebar.css("height", `${this.vwHeight()}px`);
     if (!sidebar.hasClass("active") && !this.isMobVw()) {
-      Cookies.set('cwossidebar', 'on', {expires : 1, secure: true, sameSite: 'strict', domain: location.hostname});
+      (new Cookie(true)).set('cwossidebar', 'on', {expires : "1 day", secure: true, sameSite: 'strict', domain: location.hostname});
       sidebar.animate({
         opacity: 1,
         left: 0
