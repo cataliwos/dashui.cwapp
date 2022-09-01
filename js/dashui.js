@@ -719,7 +719,7 @@ class DashUI {
       html += `<div id="cwos-prjtitle">`; // project title
         html += `<h1 class="hidden">${this.header.title}</h1>`;
         html += `<div id="cwos-prjicon">`;
-          html += `<a href="${this.header.path}"> <img src="${this.header.logo}" alt="${this.header.title}"></a>`;
+          html += `<a title="${this.header.title}" href="${this.header.path}"> <img src="${this.header.logo}"></a>`;
         html += `</div>`;
       html += `</div>`; // project title
       html += this.domUser();
@@ -734,7 +734,7 @@ class DashUI {
       dom += `<div id="${this.conf.user}" class="theme-color native">`;
         dom += `<div id="cwos-user-title">${this.user.title}</div>`;
         dom += `<div id="cwos-user-avatar">`;
-          dom += `<img src="${this.user.avatar}" alt="${this.user.title}">`;
+          dom += `<img src="${this.user.avatar}" title="${this.user.title}">`;
         dom += `</div>`;
         dom += `<div class="cwos-dropbar">`;
           dom += `<div class="cwos-dropbar-description color-bg">`;
@@ -874,10 +874,10 @@ class DashUI {
     if (this.ready.includes("spotlight")) {
       dom += `<div id="cwos-asidespotlight">`;
         dom += `<div id="cwos-slcover">`;
-          dom += `<img src="${this.spotlight.cover}" alt="${this.spotlight.title}">`;
+          dom += `<img src="${this.spotlight.cover}" title="${this.spotlight.title}">`;
         dom += `</div>`;
         dom += `<div id="cwos-slavatar">`;
-          dom += `<img src="${this.spotlight.avatar}" alt="${this.spotlight.title}">`;
+          dom += `<img src="${this.spotlight.avatar}" title="${this.spotlight.title}">`;
         dom += `</div>`;
         dom += `<div id="cwos-sltitle" title="${this.spotlight.title}">`;
           dom += `<button type="button" id="cwos-sptltoggl" class="cwos-button"></button>`;
