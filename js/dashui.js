@@ -15,6 +15,7 @@ class DashUI {
       mobMaxWidth: 960,
       sidebarWidth: 260,
       headerHeight: 70,
+      hide: false,
       animMin: 160,
       animMax: 260,
       maxCartItem: 3,
@@ -36,6 +37,7 @@ class DashUI {
       mobMaxWidth: "number",
       sidebarWidth: "number",
       headerHeight: "number",
+      hide: "boolean",
       animMin: "number",
       animMax: "number",
       maxCartItem: "number",
@@ -183,7 +185,7 @@ class DashUI {
           ths.pushCartList(cart.list);
         } else {
           // fetch list
-          let getParam = param && typeof param == "object" ? param : {};
+          let getParam = typeof param == "object" ? param : {};
           getParam.limit = this.conf.maxCartItem;
           $.ajax({
             url:  cart.get,
@@ -239,7 +241,7 @@ class DashUI {
           ths.pushNotificationList(notification.list);
         } else {
           // fetch list
-          let getParam = param && typeof param == "object" ? param : {};
+          let getParam = typeof param == "object" ? param : {};
           getParam.limit = this.conf.maxNoticeItem;
           getParam.unread = true;
           $.ajax({
@@ -507,6 +509,7 @@ class DashUI {
       });
       $("body").prepend(this.domSidebar());
       $("body").prepend(this.domHeader());
+      if (this.conf.hide == true) (new Cookie(true)).set('cwossidebar', 'off', {expires : "1 day", secure: true, sameSite: 'strict', domain: location.hostname});
       this.layout();
       this.startServices();
       setTimeout(this.removeLoader.bind(this), 100*5);
