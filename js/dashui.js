@@ -1129,7 +1129,7 @@ class DashUI {
       navbarBtn.css({"z-index": 2, opacity: 1});
       this.clsSidebar();
     } 
-    if (typeof cwos == "object" && typeof cwos.nav == "object") cwos.nav.affixed();
+    if (typeof cwos == "object" && typeof cwos.nav == "object" && cwos.nav !== null) cwos.nav.affixed();
   }
 
 }
