@@ -1070,7 +1070,7 @@ class DashUI {
       vwsection.animate({
         width : wdt
       }, this.conf.animMax, function(){
-        if (typeof cwos == "object" && typeof cwos.nav == "object") cwos.nav.affixed(wdt, 1);
+        if (typeof cwos == "object" && typeof cwos.nav == "object" && cwos.nav !== null) cwos.nav.affixed(wdt, 1);
       });
     }
   }
@@ -1094,7 +1094,7 @@ class DashUI {
       vwsection.animate({
         width : wdt
       }, this.conf.animMax, function(){
-        if (typeof cwos == "object" && typeof cwos.nav == "object") cwos.nav.affixed(wdt, lft);
+        if (typeof cwos == "object" && typeof cwos.nav == "object" && cwos.nav !== null) cwos.nav.affixed(wdt, lft);
       });
     }
   }
