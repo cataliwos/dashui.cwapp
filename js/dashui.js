@@ -67,6 +67,7 @@ class DashUI {
     this.user = {
       avatar: "",
       title: "Welcome",
+      subtitle: "",
       description: "You are not logged in.",
       links: []
     }
@@ -154,6 +155,7 @@ class DashUI {
           this.user.avatar = user.avatar;
           this.user.title = user.title;
           this.user.description = user.description;
+          if ("subtitle" in user) this.user.subtitle = user.subtitle;
           let links = [];
           $.each(user.links, function(_index, link){
             if ("title" in link && "path" in link && "onclick" in link) {
@@ -741,34 +743,10 @@ class DashUI {
         dom += `</div>`;
         dom += `<div class="cwos-dropbar">`;
           dom += `<div class="cwos-dropbar-description color-bg">`;
-            // dom += `<div id="cwos-mobxtra-icon" class="show-phone">`;
-              // if (this.ready.includes("notification")){
-              //   dom += `<div id="${this.conf.notificationXtra}" onclick="" class="theme-color yellow show-phone">`;
-              //     dom += `<div class="cwos-dropbar">`;
-              //       dom += `<div class="cwos-dropbar-description color-bg">`;
-              //         dom += `<b>Notifications</b> <br> (<span class="cwos-unread-notifications">0</span>/<span class="cwos-all-notifications">0</span>) Unread`;
-              //       dom += `</div>`;
-              //       dom += `<ul class="cwos-dropbar-list">`;
-              //      dom += ` </ul>`;
-              //     dom += `</div>`;
-              //   dom += `</div>`;
-              // } if (this.ready.includes("cart")) {
-              //   dom += `<div id="${this.conf.cartXtra}" onclick="" class="theme-color amber show-phone">`;
-              //     dom += `<div class="cwos-dropbar">`;
-              //       dom += `<div class="cwos-dropbar-description color-bg">`;
-              //         dom += `<button onclick="" disabled class="cwos-cart-checkout cwos-button asphalt clear-border push-right margn -m10 -mleft -mbottom no-shadow paddn -p10 -pall"><i class="fas fa-money-bill"></i> Checkout</button>`;
-              //         dom += `<h3>My Cart</h3>`; 
-              //         dom += `<p>(<span class='cwos-cart-item-total'>0</span>) Items</p>`;
-              //         dom += `<h4>Subtotal</h4>`; 
-              //         dom += `<code class="cwos-cart-subtotal font-size-1-2" title="">0.00</code>`;
-              //       dom += `</div>`;
-              //       dom += `<ul class="cwos-dropbar-list">`;
-              //       dom+= `</ul>`;
-              //     dom += `</div>`;
-              //   dom += `</div>`;
-              // }
-            // dom += `</div>`;
             dom += `<h3>${this.user.description}</h3>`;
+            if (this.user.subtitle) {
+              dom += `<h4>${this.user.subtitle}</h4>`;
+            }
           dom += `</div>`;
           dom += `<ul class="cwos-dropbar-list">`;
             $.each(this.user.links, function(_i, lnk){
