@@ -727,9 +727,11 @@ class DashUI {
           html += `<a title="${this.header.title}" href="${this.header.path}"> <img src="${this.header.logo}"></a>`;
         html += `</div>`;
       html += `</div>`; // project title
-      html += this.domUser();
-      html += this.domNotification();
-      html += this.domCart();
+      html += `<div id="cwos-barwrp">`;
+        html += this.domUser();
+        html += this.domNotification();
+        html += this.domCart();
+      html += `</div>`;
     html += `</header>`;
     return html;
   }
@@ -1108,6 +1110,20 @@ class DashUI {
       this.clsSidebar();
     } 
     if (typeof cwos == "object" && typeof cwos.nav == "object" && cwos.nav !== null) cwos.nav.affixed();
+    // resize #cwos-barwrp
+    let barwrp = $(document).find("#cwos-barwrp");
+    if (barwrp.length) {
+      if (!this.isMobVw()) {
+        let wrpWdt = this.conf.headerHeight * 5;
+        if (!this.ready.includes("notification")) wrpWdt -= this.conf.headerHeight;
+        if (!this.ready.includes("cart")) wrpWdt -= this.conf.headerHeight;
+        if (wrpWdt > 0) {
+          barwrp.css("width", `${wrpWdt}px`);
+        }
+      } else {
+        barwrp.css("width", `${this.conf.headerHeight}px`);
+      }
+    }
   }
 
 }

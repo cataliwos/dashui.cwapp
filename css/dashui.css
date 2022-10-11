@@ -67,10 +67,7 @@ header#cwos-header {
   position: fixed;
   height: 70px;
   width: 100%;
-  background-color: #fff;
-  -webkit-box-shadow: 0 1.5px 1.1px -1px #000;
-  -moz-box-shadow: 0 1.5px 1.1px -1px #000;
-  box-shadow: 0 1.5px 1.1px -1px #000;
+  background-color: #1976D2;
   padding: 9px 21px;
   padding-left: 81px;
   z-index: 140;
@@ -106,11 +103,11 @@ header#cwos-header #aside-toggle #cwos-sidebar-toggle {
   margin: 0;
   padding: 15px;
   z-index: 0;
+  background-color: rgba(236, 240, 241, 0.5);
 }
 header#cwos-header #aside-toggle #cwos-navbar-toggle:hover,
 header#cwos-header #aside-toggle #cwos-sidebar-toggle:hover {
   border-color: #d5dde0;
-  background-color: #d6e0eb;
   color: #1976D2;
 }
 header#cwos-header #aside-toggle #cwos-navbar-toggle::before,
@@ -121,6 +118,7 @@ header#cwos-header #aside-toggle #cwos-sidebar-toggle::before {
 }
 header#cwos-header #aside-toggle #cwos-navbar-toggle.active,
 header#cwos-header #aside-toggle #cwos-sidebar-toggle.active {
+  background-color: #c9d4d7;
   color: #1976D2;
 }
 header#cwos-header #aside-toggle #cwos-navbar-toggle::before {
@@ -159,6 +157,14 @@ header#cwos-header.centre #cwos-prjtitle {
 header#cwos-header.strict-centre #cwos-prjtitle {
   margin: 0 auto !important;
 }
+header#cwos-header #cwos-barwrp {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 70px;
+  width: 70px;
+  background-color: #fff;
+}
 header#cwos-header #cwos-user,
 header#cwos-header #cwos-notification,
 header#cwos-header #cwos-cart {
@@ -169,6 +175,7 @@ header#cwos-header #cwos-cart {
   border-bottom-width: 10px;
   border-bottom-style: solid;
   border-bottom-color: transparent !important;
+  color: #231F20;
   -webkit-transition: all 0.2s ease-in;
   -moz-transition: all 0.2s ease-in;
   -ms-transition: all 0.2s ease-in;
@@ -1025,7 +1032,7 @@ aside#cwos-sidebar #cwos-asidewrp .cwos-snavwrp .cwos-sidenav li:hover::after {
   width: 103%;
 }
 aside#cwos-sidebar #cwos-asidewrp .cwos-snavwrp .cwos-sidenav li.cwos-curnav {
-  border-left-color: #1976D2 !important;
+  border-left-color: #1976D2;
 }
 aside#cwos-sidebar #cwos-asidewrp .cwos-snavwrp.xpndnv .cwos-snavheadn::after {
   content: "\f068";
@@ -1095,6 +1102,10 @@ body.no-scroll section#cwos-content {
 }
 
 @media only screen and (min-width: 48em) {
+  #cwos-barwrp {
+    width: 350px;
+  }
+
   #cwos-mobxtra-icon {
     height: 0px !important;
   }
