@@ -111,6 +111,9 @@ class DashUI {
   isMobVw () {
     return $(window).width() <= this.conf.mobMaxWidth;
   }
+  isTabVw () {
+    return $(window).width() <= 1024;
+  }
   vwHeight () {
     return $(window).height() - this.conf.headerHeight;
   }
@@ -514,8 +517,14 @@ class DashUI {
       if (this.conf.hide == true) (new Cookie(true)).set('cwossidebar', 'off', {expires : "1 day", secure: true, sameSite: 'strict', domain: location.hostname});
       this.layout();
       this.startServices();
-      setTimeout(this.removeLoader.bind(this), 100*5);
-      // this.removeLoader();
+      setTimeout((function (){
+        this.removeLoader();
+        $.event.trigger({
+          type:    "UILoaded",
+          message: "UI loadded successfully.",
+          time:    new Date()
+        });
+      }).bind(this), 100*5);
     } if (window.intervCnt >= 10 * 10) {
       this.removeLoader();
       clearInterval(window.checkState);
