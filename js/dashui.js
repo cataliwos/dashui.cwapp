@@ -750,7 +750,7 @@ class DashUI {
       dom += `<div id="${this.conf.user}" class="theme-color native">`;
         dom += `<div id="cwos-user-title">${this.user.title}</div>`;
         dom += `<div id="cwos-user-avatar">`;
-          dom += `<img src="${this.user.avatar}" title="${this.user.title}">`;
+          dom += `<img class="cwos-user-avatar" src="${this.user.avatar}" title="${this.user.title}">`;
         dom += `</div>`;
         dom += `<div class="cwos-dropbar">`;
           dom += `<div class="cwos-dropbar-description color-bg">`;
