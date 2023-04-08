@@ -873,8 +873,8 @@ class DashUI {
         dom += `</div>`;
         dom += `<div id="cwos-sltitle" title="${this.spotlight.title}">`;
           dom += `<button type="button" id="cwos-sptltoggl" class="cwos-button"></button>`;
-          dom += `<h3>${this.spotlight.title.length > 18 ? this.spotlight.title.substring(0,16) + '..' : this.spotlight.title}</h3>`;
-          dom += `<h4>${this.spotlight.subtitle.length > 17 ? this.spotlight.subtitle.substring(0,15) + '..' : this.spotlight.subtitle}</h4>`;
+          dom += `<h3>${this.spotlight.title.length > 22 ? this.spotlight.title.substring(0,20) + '..' : this.spotlight.title}</h3>`;
+          dom += `<h4>${this.spotlight.subtitle.length > 23 ? this.spotlight.subtitle.substring(0,21) + '..' : this.spotlight.subtitle}</h4>`;
           if ("links" in this.spotlight && typeof this.spotlight.links == "object" && objectLength(this.spotlight.links)) {
             dom += `<ul id="cwos-sllinks">`;
             $.each(this.spotlight.links, function(_i, lnk){
