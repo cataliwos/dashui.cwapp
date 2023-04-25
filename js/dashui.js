@@ -873,7 +873,7 @@ class DashUI {
         dom += `</div>`;
         dom += `<div id="cwos-sltitle" title="${this.spotlight.title}">`;
           dom += `<button type="button" id="cwos-sptltoggl" class="cwos-button"></button>`;
-          dom += `<h3>${this.spotlight.title.length > 22 ? this.spotlight.title.substring(0,20) + '..' : this.spotlight.title}</h3>`;
+          dom += `<h3>${this.spotlight.title.length > 20 ? this.spotlight.title.substring(0,18) + '..' : this.spotlight.title}</h3>`;
           dom += `<h4>${this.spotlight.subtitle.length > 23 ? this.spotlight.subtitle.substring(0,21) + '..' : this.spotlight.subtitle}</h4>`;
           if ("links" in this.spotlight && typeof this.spotlight.links == "object" && objectLength(this.spotlight.links)) {
             dom += `<ul id="cwos-sllinks">`;
@@ -899,7 +899,7 @@ class DashUI {
     $.each(this.sidenav, function(_i, nav){
       if (nav.links && objectLength(nav.links)) {
         dom += `<div class="cwos-snavwrp" id="cwos-nvwrp-${nav.name}">`;
-          dom += `<h2 data-wrapper="cwos-nvwrp-${nav.name}" class="cwos-snavheadn">${nav.title}</h2>`;
+          dom += `<h2 data-wrapper="cwos-nvwrp-${nav.name}" class="cwos-snavheadn">${nav.title.length > 20 ? nav.title.substring(0,18) + '..' : nav.title}</h2>`;
           let ulcls = ["cwos-sidenav"];
           dom += `<ul class="${ulcls.join(' ')}" id="cwos-snav-${nav.name}">`;
             if ("links" in nav && typeof nav.links == "object") {
