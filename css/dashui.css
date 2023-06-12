@@ -849,7 +849,7 @@ aside#cwos-sidebar #cwos-asidewrp #cwos-asidespotlight #cwos-sltitle {
   bottom: 14px;
   height: 55px;
   width: 90%;
-  background-color: rgba(242, 242, 242, 0.75);
+  background-color: rgba(255, 255, 255, 0.85);
   z-index: 5;
   padding: 8px 45px 8px 8px;
   -webkit-border-radius: 3px;
@@ -1105,23 +1105,18 @@ body.no-scroll section#cwos-content {
   #cwos-barwrp {
     width: 350px;
   }
-
   #cwos-mobxtra-icon {
     height: 0px !important;
   }
-
   #cwos-user #cwos-user-title {
     display: block !important;
   }
-
   #cwos-user {
     width: 210px !important;
   }
-
   #cwos-notification {
     right: 210px !important;
   }
-
   #cwos-cart {
     right: 280px !important;
   }

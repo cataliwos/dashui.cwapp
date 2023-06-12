@@ -1,7 +1,7 @@
 @use "sass:map";
 @use "sass:list";
 @use "sass:math";
-@import "../../../../var";
+@import "../../../../base-color";
 @import "./var";
 @import "./fn";
 @import "./colors";
@@ -558,7 +558,7 @@ aside#cwos-sidebar{
         position: absolute;
         left: 5%; bottom: 14px;
         height: 55px; width: 90%;
-        background-color: theme-color('transparent', 'light');
+        background-color: rgba(#fff, 0.85);
         z-index: 5;
         padding: 8px 45px 8px 8px;
         @include -br(3px);
