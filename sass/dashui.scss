@@ -31,7 +31,7 @@ header#cwos-header {
   position: fixed;
   height: $header-height;
   width: 100%;
-  background-color: theme-color('native', bg);
+  background-color: theme-color('catali-blue', bg);
   padding: 9px 21px;
   padding-left: 81px;
   z-index: 140;
@@ -57,7 +57,7 @@ header#cwos-header {
       background-color: rgba(theme-color('cloud', bg), 0.5);
       &:hover{
         border-color: darken(theme-color('cloud',bg), 8%);
-        color: theme-color('native', bg);
+        color: theme-color('catali-blue', bg);
       }
       &::before{
         font-family: $fa-pro, $fa-free;
@@ -66,7 +66,7 @@ header#cwos-header {
       }
       &.active{
         background-color: darken(theme-color('cloud', bg),12%);
-        color: theme-color('native', bg);
+        color: theme-color('catali-blue', bg);
       }
     }
     #cwos-navbar-toggle::before{ content: "\f0c9"; }
@@ -228,7 +228,7 @@ header#cwos-header {
   #cwos-cart.full::before{ content: "\f217"; font-weight: $fa-weight-solid;}
   #cwos-user{
     right: 0;
-    background-color: rgba(theme-color('native', bg), 0.2);
+    background-color: rgba(theme-color('catali-blue', bg), 0.2);
     #cwos-user-title,
     #cwos-user-avatar{
       height: 100%;
@@ -253,14 +253,14 @@ header#cwos-header {
       }
     }
     &:hover{
-      background-color: rgba(theme-color('native', bg), 0.8);
-      color: theme-color('native', fg);
+      background-color: rgba(theme-color('catali-blue', bg), 0.8);
+      color: theme-color('catali-blue', fg);
     }
-    &.active{ border-bottom-color: theme-color('native', bg) !important; overflow: visible; }
+    &.active{ border-bottom-color: theme-color('catali-blue', bg) !important; overflow: visible; }
     &.active > .cwos-dropbar{ overflow: visible !important; }
     .cwos-dropbar-list li:hover{
-      color: darken(theme-color('native', bg), 14%);
-      &::after{ background-color: theme-color('native', bg) !important;}
+      color: darken(theme-color('catali-blue', bg), 14%);
+      &::after{ background-color: theme-color('catali-blue', bg) !important;}
     }
   }
   #cwos-notification{
@@ -546,7 +546,7 @@ aside#cwos-sidebar{
         top: 20px;
         @include -br(100%);
         border: solid 10px theme-color('transparent', 'light');
-        background-color: theme-color('native', bg);
+        background-color: theme-color('catali-blue', bg);
         z-index: 5;
         img{
           width: 100%;
@@ -567,7 +567,7 @@ aside#cwos-sidebar{
           text-align: center;
         }
         h3{
-          color: theme-color('native', bg);
+          color: theme-color('catali-blue', bg);
           font-size: 1.05em;
         }
         h4{
@@ -588,8 +588,8 @@ aside#cwos-sidebar{
           font-size: 1.5em;
           padding: 12px 8px;
           &:hover, &.btn-opn{
-            background-color: theme-color('native', bg);
-            color: theme-color('native', fg);
+            background-color: theme-color('catali-blue', bg);
+            color: theme-color('catali-blue', fg);
           }
           &::before{
             font-family: $fa-pro, $fa-free;
@@ -617,7 +617,7 @@ aside#cwos-sidebar{
             font-weight: bold;
             &:hover{
               background-color: lighten(#000, 92%);
-              color: darken(theme-color("native", bg), 12%);
+              color: darken(theme-color("catali-blue", bg), 12%);
               cursor: pointer;
             }
           }
@@ -686,18 +686,18 @@ aside#cwos-sidebar{
             right: 0; bottom: 0;
             height: 1px;
             content: "";
-            background-color: theme-color('native', bg);
+            background-color: theme-color('catali-blue', bg);
             @include animate-width;
             width: 0px;
           }
           &:hover{
             background-color: darken($background-color, 12%);
-            color: theme-color('native', bg);
+            color: theme-color('catali-blue', bg);
             cursor: pointer;
             &::after{ width: 103%;}
           }
           &.cwos-curnav {
-            border-left-color: theme-color('native', bg);
+            border-left-color: theme-color('catali-blue', bg);
           }
         }
       }

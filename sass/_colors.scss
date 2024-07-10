@@ -1,7 +1,9 @@
 @use "sass:map";
 
 $theme-colors : (
-  'native'          : (bg : #1976D2, fg : #ffffff),
+  'catali-blue'     : (bg : #1976D2, fg : #ffffff),
+  'catali-amber'    : (bg : #FFB700, fg : #000),
+  'catali-purple'   : (bg : #9c27b0, fg : #ffffff),
   'gold'            : (bg : #EBBD63, fg : #000),
   'rose-gold'       : (bg : #FDD09F, fg : #000),
   'red'             : (bg : #F44336, fg : #ffffff),
