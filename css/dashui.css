@@ -767,21 +767,23 @@ aside#cwos-sidebar #cwos-asidewrp #cwos-asidespotlight #cwos-sltitle {
   width: 90%;
   background-color: rgba(255, 255, 255, 0.85);
   z-index: 5;
-  padding: 8px 45px 8px 8px;
+  padding: 5px 45px 5px 8px;
   border-radius: 3px;
 }
 aside#cwos-sidebar #cwos-asidewrp #cwos-asidespotlight #cwos-sltitle h3, aside#cwos-sidebar #cwos-asidewrp #cwos-asidespotlight #cwos-sltitle h4 {
-  margin: 3.5px 0;
+  margin: 0;
   text-align: center;
 }
 aside#cwos-sidebar #cwos-asidewrp #cwos-asidespotlight #cwos-sltitle h3 {
   color: #1976D2;
   font-size: 1.05em;
+  padding: 0;
 }
 aside#cwos-sidebar #cwos-asidewrp #cwos-asidespotlight #cwos-sltitle h4 {
   color: #233675;
   font-size: 0.9em;
   font-weight: lighter;
+  margin: 0;
 }
 aside#cwos-sidebar #cwos-asidewrp #cwos-asidespotlight #cwos-sltitle #cwos-sptltoggl {
   position: absolute;

@@ -560,20 +560,22 @@ aside#cwos-sidebar{
         height: 55px; width: 90%;
         background-color: rgba(#fff, 0.85);
         z-index: 5;
-        padding: 8px 45px 8px 8px;
+        padding: 5px 45px 5px 8px;
         @include -br(3px);
         h3, h4{
-          margin: 3.5px 0;
+          margin: 0;
           text-align: center;
         }
         h3{
           color: theme-color('catali-blue', bg);
           font-size: 1.05em;
+          padding: 0;
         }
         h4{
           color: lighten($text-color, 16%);
           font-size: 0.9em;
           font-weight: lighter;
+          margin: 0;
         }
         #cwos-sptltoggl{ 
           position: absolute;
